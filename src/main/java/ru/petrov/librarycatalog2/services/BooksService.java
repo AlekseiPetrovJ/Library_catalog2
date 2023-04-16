@@ -29,13 +29,13 @@ public class BooksService {
     }
 
     public Book findOne(int id) {
-        Optional<Book> foundItem = booksRepository.findById(id);
-        return foundItem.orElse(null);
+        Optional<Book> foundBook = booksRepository.findById(id);
+        return foundBook.orElse(null);
     }
 
     @Transactional
-    public void save(Book item) {
-        booksRepository.save(item);
+    public void save(Book book) {
+        booksRepository.save(book);
     }
 
     @Transactional
