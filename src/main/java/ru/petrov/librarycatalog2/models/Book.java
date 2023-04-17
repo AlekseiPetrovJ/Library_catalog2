@@ -5,6 +5,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @Table(name = "Book")
@@ -31,7 +32,30 @@ public class Book {
     @Column(name = "publication_date")
     private int publicationDate;
 
+    @Column(name = "date_of_issue")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateOfIssue;
+
+    @Transient
+    private boolean overstay;
+
     public Book() {
+    }
+
+    public boolean isOverstay() {
+        return overstay;
+    }
+
+    public void setOverstay(boolean overstay) {
+        this.overstay = overstay;
+    }
+
+    public Date getDateOfIssue() {
+        return dateOfIssue;
+    }
+
+    public void setDateOfIssue(Date dateOfIssue) {
+        this.dateOfIssue = dateOfIssue;
     }
 
     public Person getPerson() {
