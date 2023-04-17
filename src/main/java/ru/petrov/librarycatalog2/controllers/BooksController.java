@@ -60,6 +60,14 @@ public class BooksController {
         return "books/edit";
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "query", required = false) String query, Model model) {
+        if (query != null && !query.isEmpty()) {
+            model.addAttribute("books", booksService.findByStartName(query));
+        }
+        return "/books/search";
+    }
+
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult,

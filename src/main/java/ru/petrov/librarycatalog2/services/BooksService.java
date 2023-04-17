@@ -8,7 +8,6 @@ import ru.petrov.librarycatalog2.models.Person;
 import ru.petrov.librarycatalog2.repositories.BooksRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,8 +28,11 @@ public class BooksService {
     }
 
     public Book findOne(int id) {
-        Optional<Book> foundBook = booksRepository.findById(id);
-        return foundBook.orElse(null);
+        return booksRepository.findById(id).orElse(null);
+    }
+
+    public List<Book> findByStartName(String startName) {
+        return booksRepository.findByNameStartingWith(startName);
     }
 
     @Transactional
