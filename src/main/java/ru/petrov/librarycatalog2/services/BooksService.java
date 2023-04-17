@@ -1,6 +1,7 @@
 package ru.petrov.librarycatalog2.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.petrov.librarycatalog2.models.Book;
@@ -37,6 +38,9 @@ public class BooksService {
 
     public List<Book> findAll() {
         return booksRepository.findAll();
+    }
+    public List<Book> findAllSortedByYear() {
+        return booksRepository.findAll(Sort.by("publicationDate"));
     }
 
     public Book findOne(int id) {
