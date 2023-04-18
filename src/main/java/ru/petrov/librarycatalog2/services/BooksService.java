@@ -1,6 +1,7 @@
 package ru.petrov.librarycatalog2.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.List;
 public class BooksService {
 
     //TIME_OVERSTAY 10 day
-    private final long TIME_OVERSTAY = 10*24*60*60*1000;
+    private final long TIME_OVERSTAY = 10 * 24 * 60 * 60 * 1000;
     private final BooksRepository booksRepository;
 
     @Autowired
@@ -28,7 +29,7 @@ public class BooksService {
         List<Book> byPerson = booksRepository.findByPerson(person);
         if (byPerson != null) {
             for (Book book : byPerson) {
-                if (book.getDateOfIssue()!=null && (new Date().getTime() - book.getDateOfIssue().getTime()) > TIME_OVERSTAY) {
+                if (book.getDateOfIssue() != null && (new Date().getTime() - book.getDateOfIssue().getTime()) > TIME_OVERSTAY) {
                     book.setOverstay(true);
                 }
             }
@@ -36,11 +37,22 @@ public class BooksService {
         return byPerson;
     }
 
-    public List<Book> findAll() {
-        return booksRepository.findAll();
-    }
-    public List<Book> findAllSortedByYear() {
-        return booksRepository.findAll(Sort.by("publicationDate"));
+    public List<Book> findAll(int page, int bookPerPage, boolean sortedByYear) {
+        if (page == 0 && bookPerPage == 0) {              //default param pagination
+            if (sortedByYear) {
+                return booksRepository.findAll(Sort.by("publicationDate"));
+            } else {
+                return booksRepository.findAll();
+            }
+        } else if (page >= 0 && bookPerPage > 0) {
+            if (sortedByYear) {
+                return booksRepository.findAll(PageRequest.of(page, bookPerPage, Sort.by("publicationDate"))).getContent();
+            } else {
+                return booksRepository.findAll(PageRequest.of(page, bookPerPage)).getContent();
+            }
+        } else {
+            return null;
+        }
     }
 
     public Book findOne(int id) {
